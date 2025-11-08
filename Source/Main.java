@@ -5,6 +5,85 @@ import java.util.Scanner;
 
 class Main {
 
+    private static int getIntInput(Scanner scanner, String prompt, int min, int max) {
+        while (true) {
+            System.out.print(prompt);
+            String input = scanner.nextLine().trim();
+            try {
+                int value = Integer.parseInt(input);
+                if (value < min || value > max) {
+                    System.out.println("Please enter a number between " + min + " and " + max + ".");
+                } else {
+                    return value;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input! Please enter a number.");
+            }
+        }
+    }
+
+    private static int getIntInput(Scanner scanner, int min, int max) {
+        while (true) {
+            String input = scanner.nextLine().trim();
+            try {
+                int value = Integer.parseInt(input);
+                if (value < min || value > max) {
+                    System.out.println("Please enter a number between " + min + " and " + max + ".");
+                } else {
+                    return value;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input! Please enter a number.");
+            }
+        }
+    }
+
+    private static int getIntInput(Scanner scanner, String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            String input = scanner.nextLine().trim();
+            try {
+                int value = Integer.parseInt(input);
+                return value;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input! Please enter a number.");
+            }
+        }
+    }
+
+    private static double getDoubleInput(Scanner scanner, String prompt, double min) {
+        while (true) {
+            System.out.print(prompt);
+            String input = scanner.nextLine().trim();
+            try {
+                double value = Double.parseDouble(input);
+                if (value < min) {
+                    System.out.println("Please enter a number greater than or equal to " + min + ".");
+                } else {
+                    return value;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input! Please enter a valid number.");
+            }
+        }
+    }
+
+    private static double getDoubleInput(Scanner scanner, double min) {
+        while (true) {
+            String input = scanner.nextLine().trim();
+            try {
+                double value = Double.parseDouble(input);
+                if (value < min) {
+                    System.out.println("Please enter a number greater than or equal to " + min + ".");
+                } else {
+                    return value;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input! Please enter a valid number.");
+            }
+        }
+    }
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Bank bank = new Bank();
@@ -20,7 +99,7 @@ class Main {
                 System.out.println("1 - Log In");
                 System.out.println("2 - Create a user");
                 System.out.println("3 - Exit");
-                int choice = Integer.parseInt(scanner.nextLine().trim());
+                int choice = getIntInput(scanner, "Enter your choice: ", 1, 3);
 
                 if (choice == 1) {
                     System.out.println("Enter in your User ID: ");
@@ -67,18 +146,18 @@ class Main {
                     System.out.println("Create an account");
                     System.out.println("1 - Savings");
                     System.out.println("2 - Checking");
-                    int accountType = Integer.parseInt(scanner.nextLine().trim());
+                    int accountType = getIntInput(scanner, "Enter your choice: ", 1, 2);
                     if (accountType == 1) {
                         System.out.println("Would you like to deposit money?");
                         System.out.println("1 - Yes");
                         System.out.println("2 - No");
-                        int fillAccount = Integer.parseInt(scanner.nextLine().trim());
+                        int fillAccount = getIntInput(scanner, "Enter your choice: ", 1, 2);
                         if (fillAccount == 1) {
                             System.out.println("How much would you like to deposit?");
-                            int depositSave = Integer.parseInt(scanner.nextLine().trim());
+                            double depositAmount = getDoubleInput(scanner, 0.01);
                             System.out.println("What would you like to name the account?");
                             String accName = scanner.nextLine().trim();
-                            Savings acc = new Savings(0.025, current, depositSave, accName);
+                            Savings acc = new Savings(0.025, current, depositAmount, accName);
                             System.out.println("Your annual interest rate is 2.5%");
                             accountList.add(acc);
 
@@ -94,11 +173,11 @@ class Main {
                         System.out.println("Would you like to deposit money?");
                         System.out.println("1 - Yes");
                         System.out.println("2 - No");
-                        int depositMoney = Integer.parseInt(scanner.nextLine().trim());
+                        int depositMoney = getIntInput(scanner, "Enter your choice: ", 1, 2);
                         if (depositMoney == 1) {
                             System.out.println("How much would you like to deposit?");
-                            int depositCheck = Integer.parseInt(scanner.nextLine().trim());
-                            CheckingAccount acc = new CheckingAccount(current, depositCheck, checkName);
+                            double depositAmount = getDoubleInput(scanner, 0.01);
+                            CheckingAccount acc = new CheckingAccount(current, depositAmount, checkName);
                             System.out.println("Success!");
                             accountList.add(acc);
                         } else {
@@ -145,10 +224,11 @@ class Main {
                 System.out.println("8 - View Banking Report");
                 System.out.println("9 - Log out");
 
-                int actionType = Integer.parseInt(scanner.nextLine().trim());
+                int actionType = getIntInput(scanner, "Enter your choice: ", 1, 9);
+
                 if (actionType == 1) {
                     System.out.println("How much would you like to deposit?");
-                    double depositAmount = Double.parseDouble(scanner.nextLine().trim());
+                    double depositAmount = getDoubleInput(scanner, 0.01);
                     if (depositAmount < 0 || depositAmount == 0) {
                         System.out.println("Enter a number above 0!");
                     } else {
@@ -156,7 +236,7 @@ class Main {
                     }
                 } else if (actionType == 2) {
                     System.out.println("Enter in how much you would like to withdraw");
-                    double withdrawAmount = Double.parseDouble(scanner.nextLine().trim());
+                    double withdrawAmount = getDoubleInput(scanner, 0.01);
                     if (withdrawAmount < 0 || withdrawAmount == 0) {
                         System.out.println("Enter a number above 0!");
                     } else {
@@ -171,8 +251,7 @@ class Main {
                     long cardNum = min + (long) (Math.random() * (max - min + 1));
                     int cvv = 100 + (int) (Math.random() * 900);
                     LocalDate expiry = LocalDate.now().plusYears(3);
-                    System.out.println("Enter your pin (Choose a complex password): ");
-                    int pin = Integer.parseInt(scanner.nextLine().trim());
+                    int pin = getIntInput(scanner, "Enter your pin (Choose a complex password): ");
                     DebitCard card = new DebitCard(cardNum, (CheckingAccount) currentAccount, cvv, false, 5000, 0, expiry, "Valid", pin);
                     String formatted = bank.formatCreditCard(cardNum);
                     System.out.println("Your card number is: " + "5127 " + formatted);
@@ -191,7 +270,8 @@ class Main {
                     System.out.println("2 - View Status");
                     System.out.println("3 - Renew Card");
                     System.out.println("Select option: ");
-                    int cardOption = Integer.parseInt(scanner.nextLine().trim());
+                    int cardOption = getIntInput(scanner, "Enter your choice: ", 1, 3);
+
                     if (cardOption == 1 && card.getIsFrozen()) {
                         card.unfreezeCard();
                         System.out.println("Your card is now unfrozen!");
@@ -221,7 +301,8 @@ class Main {
                     System.out.println("3 - Utilities");
                     System.out.println("4 - Housing");
                     System.out.println("5 - Personal Items");
-                    int categoryType = Integer.parseInt(scanner.nextLine().trim());
+                    int categoryType = getIntInput(scanner, "Enter your choice: ", 1, 5);
+
                     String category = "";
                     if (categoryType == 1) {
                         category = "Entertainment";
@@ -235,7 +316,7 @@ class Main {
                         category = "Personal";
                     }
                     System.out.println("Enter in your pin: ");
-                    int pin = Integer.parseInt(scanner.nextLine().trim());
+                    int pin = getIntInput(scanner, "Enter your pin (Choose a complex password): ");
                     card.authorizePurchase(purchaseAmount, pin, category);
 
                 } else if (actionType == 7) {
@@ -244,7 +325,8 @@ class Main {
                     System.out.println("2 - Deposits");
                     System.out.println("3 - All");
                     System.out.println("4 - Purchases");
-                    int type = Integer.parseInt(scanner.nextLine().trim());
+                    int type = getIntInput(scanner, "Enter your choice: ", 1, 4);
+
                     if (type == 1) {
                         currentAccount.getTransactions("Withdraw");
                     } else if (type == 2) {

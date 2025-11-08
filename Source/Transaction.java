@@ -23,11 +23,11 @@ public class Transaction {
 
     public void printTransaction() {
         if (type.equals("Deposit")) {
-            System.out.println("You deposited " + amount + "on " + time);
+            System.out.println("You deposited " + amount + " on " + time);
         } else if (type.equals("Withdraw")) {
-            System.out.println("You withdrew " + amount + "on " + time);
+            System.out.println("You withdrew " + amount + " on " + time);
         } else if (type.equals("Purchase")) {
-            System.out.println("You spent " + amount + "on " + time);
+            System.out.println("You spent " + amount + " on " + time);
             if (category.equals("Entertainment")) {
                 System.out.println("This purchase was for entertainment");
             } else if (category.equals("Housing")) {

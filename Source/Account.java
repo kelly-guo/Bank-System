@@ -51,8 +51,8 @@ public class Account {
     }
 
     public void getTransactions() {
-        for (int i = log.size() - 1; i >= log.size() - 11; i--) {
-            log.get(i).printTransaction();;
+        for (int i = 0; i < log.size(); i--) {
+            log.get(i).printTransaction();
         }
     }
 
@@ -68,17 +68,13 @@ public class Account {
     public double getPurchaseTotal() {
         double sum = 0;
 
-        for (int i = log.size() - 1; i >= 0; i--) {
+        for (int i = 0; i < log.size(); i--) {
             Transaction curr = log.get(i);
-            if (Period.between(curr.getDate(), LocalDate.now()).getMonths() >= 1) {
-                break;
-            } else {
-                if (curr.getType().equals("Purchase")) {
-                    sum += curr.getAmount();
-                }
+            if (curr.getType().equals("Purchase")) {
+                sum += curr.getAmount();
             }
-
         }
+
         return sum;
     }
 
