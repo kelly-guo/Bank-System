@@ -1,6 +1,5 @@
 
 import java.time.LocalDate;
-import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +21,7 @@ public class Account {
         if (amount > 0) {
             this.balance += amount;
             Transaction deposit = new Transaction(LocalDate.now(), "Deposit", amount);
-            log.add(deposit);
+            log.add(0, deposit);
         } else {
             System.out.println("Please enter an amount greater than 0!");
         }
@@ -31,7 +30,7 @@ public class Account {
     public void withdraw(double amount) {
         if (balance < amount) {
             Transaction withdraw = new Transaction(LocalDate.now(), "Withdraw", amount);
-            log.add(withdraw);
+            log.add(0, withdraw);
             System.out.println("Your balance is less than your withdrawal amount!");
         } else {
             this.balance -= amount;
@@ -47,11 +46,11 @@ public class Account {
     }
 
     public void addTransaction(Transaction transaction) {
-        log.add(transaction);
+        log.add(0, transaction);
     }
 
     public void getTransactions() {
-        for (int i = 0; i < log.size(); i--) {
+        for (int i = 0; i < log.size(); i++) {
             log.get(i).printTransaction();
         }
     }
@@ -68,7 +67,7 @@ public class Account {
     public double getPurchaseTotal() {
         double sum = 0;
 
-        for (int i = 0; i < log.size(); i--) {
+        for (int i = 0; i < log.size(); i++) {
             Transaction curr = log.get(i);
             if (curr.getType().equals("Purchase")) {
                 sum += curr.getAmount();
@@ -80,42 +79,45 @@ public class Account {
 
     public void getBankReport() {
         double foodPercent = 0;
-        int totalTransactions = 0;//monthly
+        double totalTransactions = 0;//monthly
         double enterPercent = 0;
         double utilPercent = 0;
         double housePercent = 0;
         double persPercent = 0;
-        for (int i = log.size() - 1; i >= 0; i--) {
+        for (int i = 0; i < log.size(); i++) {
             Transaction curr = log.get(i);
-            if (Period.between(curr.getDate(), LocalDate.now()).getMonths() >= 1) {
-                foodPercent = (foodPercent / totalTransactions) * 100;
-                enterPercent = (enterPercent / totalTransactions) * 100;
-                utilPercent = (utilPercent / totalTransactions) * 100;
-                housePercent = (housePercent / totalTransactions) * 100;
-                persPercent = (persPercent / totalTransactions) * 100;
-
-                break;
+            if (curr.getDate().isBefore(LocalDate.now().minusMonths(1))) {
+                continue;
             } else {
-                totalTransactions++;
+                totalTransactions += curr.getAmount();
                 if (curr.getCategory().equals("Food")) {
-                    foodPercent++;
+                    foodPercent += curr.getAmount();
                 } else if (curr.getCategory().equals("Entertainment")) {
-                    enterPercent++;
+                    enterPercent += curr.getAmount();
                 } else if (curr.getCategory().equals("Utilities")) {
-                    utilPercent++;
+                    utilPercent += curr.getAmount();
                 } else if (curr.getCategory().equals("Housing")) {
-                    housePercent++;
+                    housePercent += curr.getAmount();
                 } else {
-                    persPercent++;
+                    persPercent += curr.getAmount();
                 }
             }
-
         }
-        System.out.println("You spent " + foodPercent + "of your total purchase amount on food in a month");
-        System.out.println("You spent " + enterPercent + "of your total purchase amount on entertainment in a month");
-        System.out.println("You spent " + utilPercent + "of your total purchase amount on utilities in a month");
-        System.out.println("You spent " + housePercent + "of your total purchase amount on housing in a month");
-        System.out.println("You spent " + persPercent + "of your total purchase amount on personal items in a month");
+
+        if (totalTransactions == 0) {
+            System.out.println("No transactions this month");
+            return;
+        }
+        foodPercent = (foodPercent / totalTransactions) * 100;
+        enterPercent = (enterPercent / totalTransactions) * 100;
+        utilPercent = (utilPercent / totalTransactions) * 100;
+        housePercent = (housePercent / totalTransactions) * 100;
+        persPercent = (persPercent / totalTransactions) * 100;
+        System.out.println("You spent " + foodPercent + "% of your total purchase amount on food in a month");
+        System.out.println("You spent " + enterPercent + "% of your total purchase amount on entertainment in a month");
+        System.out.println("You spent " + utilPercent + "% of your total purchase amount on utilities in a month");
+        System.out.println("You spent " + housePercent + "% of your total purchase amount on housing in a month");
+        System.out.println("You spent " + persPercent + "% of your total purchase amount on personal items in a month");
 
     }
 

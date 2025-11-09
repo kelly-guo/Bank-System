@@ -315,7 +315,6 @@ class Main {
                     } else {
                         category = "Personal";
                     }
-                    System.out.println("Enter in your pin: ");
                     int pin = getIntInput(scanner, "Enter your pin (Choose a complex password): ");
                     card.authorizePurchase(purchaseAmount, pin, category);
 
