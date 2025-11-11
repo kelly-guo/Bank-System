@@ -29,10 +29,10 @@ public class Account {
 
     public void withdraw(double amount) {
         if (balance < amount) {
-            Transaction withdraw = new Transaction(LocalDate.now(), "Withdraw", amount);
-            log.add(0, withdraw);
             System.out.println("Your balance is less than your withdrawal amount!");
         } else {
+            Transaction withdraw = new Transaction(LocalDate.now(), "Withdraw", amount);
+            log.add(0, withdraw);
             this.balance -= amount;
         }
     }
@@ -88,7 +88,7 @@ public class Account {
             Transaction curr = log.get(i);
             if (curr.getDate().isBefore(LocalDate.now().minusMonths(1))) {
                 continue;
-            } else {
+            } else if (curr.getCategory() != null) {
                 totalTransactions += curr.getAmount();
                 if (curr.getCategory().equals("Food")) {
                     foodPercent += curr.getAmount();
@@ -109,15 +109,20 @@ public class Account {
             return;
         }
         foodPercent = (foodPercent / totalTransactions) * 100;
+        String formattedFood = String.format("%.2f", foodPercent);
         enterPercent = (enterPercent / totalTransactions) * 100;
+        String formattedEnter = String.format("%.2f", enterPercent);
         utilPercent = (utilPercent / totalTransactions) * 100;
+        String formattedUtil = String.format("%.2f", utilPercent);
         housePercent = (housePercent / totalTransactions) * 100;
+        String formattedHouse = String.format("%.2f", housePercent);
         persPercent = (persPercent / totalTransactions) * 100;
-        System.out.println("You spent " + foodPercent + "% of your total purchase amount on food in a month");
-        System.out.println("You spent " + enterPercent + "% of your total purchase amount on entertainment in a month");
-        System.out.println("You spent " + utilPercent + "% of your total purchase amount on utilities in a month");
-        System.out.println("You spent " + housePercent + "% of your total purchase amount on housing in a month");
-        System.out.println("You spent " + persPercent + "% of your total purchase amount on personal items in a month");
+        String formattedPers = String.format("%.2f", persPercent);
+        System.out.println("You spent " + formattedFood + "% of your total purchase amount on food in a month");
+        System.out.println("You spent " + formattedEnter + "% of your total purchase amount on entertainment in a month");
+        System.out.println("You spent " + formattedUtil + "% of your total purchase amount on utilities in a month");
+        System.out.println("You spent " + formattedHouse + "% of your total purchase amount on housing in a month");
+        System.out.println("You spent " + formattedPers + "% of your total purchase amount on personal items in a month");
 
     }
 

@@ -315,7 +315,7 @@ class Main {
                     } else {
                         category = "Personal";
                     }
-                    int pin = getIntInput(scanner, "Enter your pin (Choose a complex password): ");
+                    int pin = getIntInput(scanner, "Enter your pin: ");
                     card.authorizePurchase(purchaseAmount, pin, category);
 
                 } else if (actionType == 7) {
